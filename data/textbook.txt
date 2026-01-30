@@ -1,0 +1,35 @@
+Sorting algorithms are used to arrange data in a particular order.
+Quick Sort is a divide-and-conquer algorithm.
+It selects a pivot element and partitions the array into two sub-arrays.
+The average time complexity of Quick Sort is O(n log n).
+The worst-case time complexity is O(n²) when the pivot is always the smallest or largest element.
+
+Merge Sort is another divide-and-conquer algorithm.
+It divides the array into two halves, sorts them recursively, and then merges them.
+The time complexity of Merge Sort is O(n log n) in all cases.
+Merge Sort is a stable sorting algorithm.
+
+Binary Search is used to find an element in a sorted array.
+It works by repeatedly dividing the search interval in half.
+The time complexity of Binary Search is O(log n).
+Binary Search requires the array to be sorted beforehand.
+
+Hash Tables provide constant time average case for search, insertion, and deletion operations.
+A hash function maps keys to array indices.
+Collision handling can be done using chaining or open addressing.
+The load factor affects the performance of hash tables.
+
+Dynamic Programming is an algorithmic technique for solving optimization problems.
+It breaks down problems into smaller subproblems and stores their solutions.
+Examples include the Fibonacci sequence, knapsack problem, and longest common subsequence.
+Memoization and tabulation are two approaches to implement dynamic programming.
+
+Graph algorithms include Breadth-First Search (BFS) and Depth-First Search (DFS).
+BFS explores nodes level by level and uses a queue data structure.
+DFS explores as far as possible along each branch and uses a stack data structure.
+Dijkstra's algorithm finds the shortest path in weighted graphs.
+
+Time complexity analysis helps evaluate algorithm efficiency.
+Space complexity measures the memory usage of an algorithm.
+Big O notation describes the upper bound of algorithm performance.
+Common complexities include O(1), O(log n), O(n), O(n log n), and O(n²).

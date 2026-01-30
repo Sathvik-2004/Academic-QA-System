@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Academic Question Answering System powered by RoBERTa AI">
+    <title>Academic QA System | Intelligent Document Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">📚</div>
+                    <h1>Academic QA</h1>
+                </div>
+            </div>
+            
+            <div class="sidebar-content">
+                <!-- PDF Upload Section -->
+                <div class="upload-section">
+                    <h3>📄 Upload Document</h3>
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="pdfInput" accept=".pdf,.docx,.txt" hidden>
+                        <div class="upload-icon">📤</div>
+                        <p>Drop file here or <span class="upload-link">browse</span></p>
+                        <span class="upload-hint">PDF, Word, or TXT (Max 16MB)</span>
+                    </div>
+                    <div class="uploaded-file" id="uploadedFile" style="display: none;">
+                        <span class="file-icon">✅</span>
+                        <span class="file-name" id="fileName"></span>
+                        <button class="remove-file" id="removeFile" aria-label="Remove file">✕</button>
+                    </div>
+                </div>
+
+                <!-- Or use text input -->
+                <div class="text-input-section">
+                    <div class="divider">
+                        <span>or paste text</span>
+                    </div>
+                    <textarea id="contextInput" placeholder="Paste your textbook content, research paper, notes, or any text you want to analyze..."></textarea>
+                    <button class="btn btn-outline btn-sm" id="loadSampleBtn">
+                        📖 Load Sample Data
+                    </button>
+                </div>
+
+                <!-- Context Status -->
+                <div class="context-status" id="contextStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">No document loaded</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Powered by <strong>RoBERTa AI</strong></p>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <!-- Chat Header -->
+            <header class="chat-header">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+                <div class="header-info">
+                    <h2>Document Q&A</h2>
+                    <span class="model-badge">RoBERTa Base SQuAD2</span>
+                </div>
+                <button class="clear-chat" id="clearChat">Clear Chat</button>
+            </header>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome Message -->
+                <div class="welcome-message" id="welcomeMessage">
+                    <div class="welcome-icon">🎓</div>
+                    <h2>Welcome to Academic QA</h2>
+                    <p>Upload a document or paste text in the sidebar to get started. Then ask any question about the content.</p>
+                    <div class="suggestions">
+                        <p>Example questions:</p>
+                        <div class="suggestion-chips">
+                            <button class="chip" data-question="What is the main topic discussed?">Main topic?</button>
+                            <button class="chip" data-question="What are the key concepts explained?">Key concepts?</button>
+                            <button class="chip" data-question="Can you summarize the important points?">Important points?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <form id="chatForm" class="chat-form">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="questionInput" 
+                            placeholder="Type your question here..." 
+                            rows="1"
+                            autofocus
+                            aria-label="Question input"
+                        ></textarea>
+                        <button type="submit" class="send-btn" id="sendBtn" aria-label="Send question">
+                            <span class="send-icon">➤</span>
+                        </button>
+                    </div>
+                </form>
+                <p class="input-hint">Press Enter to send • Shift+Enter for new line</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
