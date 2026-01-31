@@ -4,60 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Academic Question Answering System powered by RoBERTa AI">
-    <title>Academic QA System | Intelligent Document Analysis</title>
+    <title>Academic Q&A System | Intelligent Document Analysis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=10">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon">📚</div>
-                    <h1>Academic QA</h1>
-                </div>
+        <!-- Left Panel - Chat History -->
+        <aside class="panel panel-left" id="historyPanel">
+            <div class="panel-icon" id="historyIcon">
+                <span>☰</span>
             </div>
-            
-            <div class="sidebar-content">
-                <!-- PDF Upload Section -->
-                <div class="upload-section">
-                    <h3>📄 Upload Document</h3>
-                    <div class="upload-area" id="uploadArea">
-                        <input type="file" id="pdfInput" accept=".pdf,.docx,.txt" hidden>
-                        <div class="upload-icon">📤</div>
-                        <p>Drop file here or <span class="upload-link">browse</span></p>
-                        <span class="upload-hint">PDF, Word, or TXT (Max 16MB)</span>
-                    </div>
-                    <div class="uploaded-file" id="uploadedFile" style="display: none;">
-                        <span class="file-icon">✅</span>
-                        <span class="file-name" id="fileName"></span>
-                        <button class="remove-file" id="removeFile" aria-label="Remove file">✕</button>
+            <div class="panel-content">
+                <div class="panel-header">
+                    <h2>📜 Chat History</h2>
+                    <button class="btn-clear-history" id="clearHistory" title="Clear all history">🗑️</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty" id="historyEmpty">
+                        <span class="history-empty-icon">📭</span>
+                        <p>No chat history yet</p>
+                        <span class="history-hint">Your conversations will appear here</span>
                     </div>
                 </div>
-
-                <!-- Or use text input -->
-                <div class="text-input-section">
-                    <div class="divider">
-                        <span>or paste text</span>
-                    </div>
-                    <textarea id="contextInput" placeholder="Paste your textbook content, research paper, notes, or any text you want to analyze..."></textarea>
-                    <button class="btn btn-outline btn-sm" id="loadSampleBtn">
-                        📖 Load Sample Data
-                    </button>
-                </div>
-
-                <!-- Context Status -->
-                <div class="context-status" id="contextStatus">
-                    <span class="status-dot"></span>
-                    <span class="status-text">No document loaded</span>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <p>Powered by <strong>RoBERTa AI</strong></p>
             </div>
         </aside>
 
@@ -65,12 +36,44 @@
         <main class="chat-container">
             <!-- Chat Header -->
             <header class="chat-header">
-                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
-                <div class="header-info">
-                    <h2>Document Q&A</h2>
-                    <span class="model-badge">RoBERTa Base SQuAD2</span>
+                <div class="header-brand">
+                    <img src="{{ url_for('static', filename='Logo.png') }}" alt="Academic Q&A Logo" class="logo-image">
+                    <h1>Academic Q&A</h1>
                 </div>
-                <button class="clear-chat" id="clearChat">Clear Chat</button>
+                <div class="header-info">
+                    <span class="model-badge">Semantic Search AI</span>
+                    <div class="context-indicator" id="contextIndicator">
+                        <span class="context-dot"></span>
+                        <span class="context-text" id="contextText">No document</span>
+                    </div>
+                </div>
+                
+                <!-- Auth Section -->
+                <div class="header-auth" id="headerAuth">
+                    <!-- Not logged in state -->
+                    <button class="btn-auth-login" id="btnShowLogin">
+                        <span class="auth-icon">👤</span>
+                        <span>Login / Sign Up</span>
+                    </button>
+                    
+                    <!-- Logged in state (hidden by default) -->
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-menu-trigger" id="userMenuTrigger">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span class="user-name" id="userName">User</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="dropdown-header">
+                                <span class="dropdown-email" id="dropdownEmail">user@email.com</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" id="btnLogout">
+                                <span>🚪</span> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </header>
 
             <!-- Chat Messages -->
@@ -78,16 +81,8 @@
                 <!-- Welcome Message -->
                 <div class="welcome-message" id="welcomeMessage">
                     <div class="welcome-icon">🎓</div>
-                    <h2>Welcome to Academic QA</h2>
-                    <p>Upload a document or paste text in the sidebar to get started. Then ask any question about the content.</p>
-                    <div class="suggestions">
-                        <p>Example questions:</p>
-                        <div class="suggestion-chips">
-                            <button class="chip" data-question="What is the main topic discussed?">Main topic?</button>
-                            <button class="chip" data-question="What are the key concepts explained?">Key concepts?</button>
-                            <button class="chip" data-question="Can you summarize the important points?">Important points?</button>
-                        </div>
-                    </div>
+                    <h2>Welcome to Academic Q&A</h2>
+                    <p>Hover over the <strong>right panel</strong> to upload a document or paste text. Then ask any question about the content.</p>
                 </div>
             </div>
 
@@ -110,8 +105,123 @@
                 <p class="input-hint">Press Enter to send • Shift+Enter for new line</p>
             </div>
         </main>
+
+        <!-- Right Panel - Upload Document -->
+        <aside class="panel panel-right" id="uploadPanel">
+            <div class="panel-icon" id="uploadIcon">
+                <span>➕</span>
+            </div>
+            <div class="panel-content">
+                <div class="panel-header">
+                    <h2>📄 Add Content</h2>
+                </div>
+                
+                <!-- Upload Document Section -->
+                <div class="upload-section">
+                    <h3>Upload Document</h3>
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="pdfInput" accept=".pdf,.docx,.txt" hidden>
+                        <div class="upload-icon-large">📤</div>
+                        <p>Drop file here or <span class="upload-link">browse</span></p>
+                        <span class="upload-hint">PDF, Word, or TXT (Max 16MB)</span>
+                    </div>
+                    <div class="uploaded-file" id="uploadedFile" style="display: none;">
+                        <span class="file-icon">✅</span>
+                        <span class="file-name" id="fileName"></span>
+                        <button class="remove-file" id="removeFile" aria-label="Remove file">✕</button>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="panel-divider">
+                    <span>or</span>
+                </div>
+
+                <!-- Paste Text Section -->
+                <div class="text-section">
+                    <h3>Paste Text</h3>
+                    <textarea id="contextInput" placeholder="Paste your textbook content, research paper, notes..."></textarea>
+                    <button class="btn-apply-text" id="applyTextBtn">Apply Text</button>
+                </div>
+
+                <!-- Status -->
+                <div class="panel-status" id="contextStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">No content loaded</span>
+                </div>
+            </div>
+        </aside>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal" style="display: none;">
+        <div class="modal-content auth-modal">
+            <button class="modal-close" id="closeAuthModal">&times;</button>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="loginForm">
+                <div class="auth-header">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to access your chat history</p>
+                </div>
+                
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-error" id="loginError"></div>
+                    <button type="submit" class="btn-auth-submit" id="btnLogin">
+                        <span>Sign In</span>
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+                </div>
+            </div>
+            
+            <!-- Signup Form -->
+            <div class="auth-form" id="signupForm" style="display: none;">
+                <div class="auth-header">
+                    <h2>Create Account</h2>
+                    <p>Sign up to save your conversations</p>
+                </div>
+                
+                <form id="signupFormElement">
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" placeholder="johndoe" required minlength="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" placeholder="••••••••" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                        <input type="password" id="signupConfirmPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-error" id="signupError"></div>
+                    <button type="submit" class="btn-auth-submit" id="btnSignup">
+                        <span>Create Account</span>
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}?v=10"></script>
 </body>
 </html>
