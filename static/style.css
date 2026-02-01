@@ -578,6 +578,43 @@ body {
     border-radius: var(--radius-md);
 }
 
+/* New Chat Button */
+.btn-new-chat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    margin-left: 12px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    color: var(--gray-700);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-new-chat:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.btn-new-chat:active {
+    transform: translateY(0);
+}
+
+.btn-new-chat .new-chat-icon {
+    font-size: 14px;
+}
+
+.btn-new-chat .new-chat-text {
+    font-weight: 500;
+}
+
 .header-brand .logo-icon {
     width: 36px;
     height: 36px;

@@ -697,8 +697,30 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    """Handle file upload and train the model on the document."""
+    """Handle file upload OR text input and train the model on the content."""
     try:
+        # Check if this is a JSON request with text content
+        if request.is_json:
+            data = request.get_json()
+            text = data.get('text', '').strip()
+            
+            if not text:
+                return jsonify({'error': 'No text provided'}), 400
+            
+            if len(text) < 50:
+                return jsonify({'error': 'Text is too short. Please provide at least 50 characters.'}), 400
+            
+            # TRAIN the model on the pasted text
+            num_chunks = train_on_document(text, "Pasted Text")
+            
+            return jsonify({
+                'success': True,
+                'text': text,
+                'filename': 'Pasted Text',
+                'message': f'Successfully trained on pasted text ({num_chunks} knowledge chunks created)'
+            })
+        
+        # Otherwise, handle file upload
         if 'file' not in request.files:
             return jsonify({'error': 'No file provided'}), 400
         

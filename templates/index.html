@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=10">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=11">
 </head>
 <body>
     <div class="app-container">
@@ -39,6 +39,10 @@
                 <div class="header-brand">
                     <img src="{{ url_for('static', filename='Logo.png') }}" alt="Academic Q&A Logo" class="logo-image">
                     <h1>Academic Q&A</h1>
+                    <button class="btn-new-chat" id="newChatBtn" title="Start new chat">
+                        <span class="new-chat-icon">✏️</span>
+                        <span class="new-chat-text">New Chat</span>
+                    </button>
                 </div>
                 <div class="header-info">
                     <span class="model-badge">Semantic Search AI</span>
@@ -222,6 +226,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}?v=10"></script>
+    <script src="{{ url_for('static', filename='script.js') }}?v=11"></script>
 </body>
 </html>

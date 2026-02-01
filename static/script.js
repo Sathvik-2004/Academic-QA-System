@@ -174,7 +174,7 @@ const AppState = {
 let historyPanel, uploadPanel, historyList, historyEmpty, clearHistory;
 let uploadArea, pdfInput, uploadedFile, fileName, removeFile;
 let contextInput, applyTextBtn, contextStatus, contextIndicator, contextText;
-let chatMessages, welcomeMessage, chatForm, questionInput, sendBtn, clearChat;
+let chatMessages, welcomeMessage, chatForm, questionInput, sendBtn, clearChat, newChatBtn;
 
 // Auth DOM Elements
 let authModal, closeAuthModalBtn, btnShowLogin;
@@ -207,6 +207,7 @@ function initDOMElements() {
     questionInput = document.getElementById('questionInput');
     sendBtn = document.getElementById('sendBtn');
     clearChat = document.getElementById('clearChat');
+    newChatBtn = document.getElementById('newChatBtn');
 
     // Auth DOM Elements
     authModal = document.getElementById('authModal');
@@ -391,6 +392,27 @@ function setupEventListeners() {
             welcomeMessage.style.display = 'block';
         }
         startNewSession();
+    });
+
+    // New Chat button (ChatGPT-style)
+    newChatBtn?.addEventListener('click', () => {
+        // Clear chat messages
+        if (chatMessages && welcomeMessage) {
+            chatMessages.innerHTML = '';
+            chatMessages.appendChild(welcomeMessage);
+            welcomeMessage.style.display = 'block';
+        }
+        // Reset context
+        updateContext('');
+        // Reset file upload UI
+        if (uploadedFile) uploadedFile.style.display = 'none';
+        if (uploadArea) uploadArea.style.display = 'block';
+        if (pdfInput) pdfInput.value = '';
+        if (contextInput) contextInput.value = '';
+        // Start fresh session
+        startNewSession('New Chat');
+        // Focus on question input
+        questionInput?.focus();
     });
 
     // Clear all history
