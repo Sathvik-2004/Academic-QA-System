@@ -475,7 +475,7 @@ async function handleFile(file) {
 
         // Clear text input and set context
         if (contextInput) contextInput.value = '';
-        updateContext(data.text);
+        updateContext(data.text, data.num_chunks);
         
         // Show training success message in chat
         if (data.message) {
@@ -511,7 +511,7 @@ async function trainOnText(text) {
         if (data.error) {
             showErrorMessage(data.error);
         } else {
-            updateContext(text);
+            updateContext(text, data.num_chunks);
             if (welcomeMessage) welcomeMessage.style.display = 'none';
             addMessage(`✅ ${data.message}\n\nYou can now ask questions about the content!`, 'bot', null, false);
             await startNewSession('Pasted Text');
@@ -524,7 +524,7 @@ async function trainOnText(text) {
     }
 }
 
-function updateContext(text) {
+function updateContext(text, chunkCount = null) {
     AppState.setContext(text);
     const currentContext = AppState.getContext();
     const statusText = contextStatus?.querySelector('.status-text');
@@ -532,9 +532,11 @@ function updateContext(text) {
     if (currentContext) {
         contextStatus?.classList.add('active');
         contextIndicator?.classList.add('active');
-        const wordCount = currentContext.split(/\s+/).length;
-        if (statusText) statusText.textContent = `${wordCount} words loaded`;
-        if (contextText) contextText.textContent = `${wordCount} words`;
+        const chunkLabel = Number.isInteger(chunkCount)
+            ? `${chunkCount} chunk${chunkCount === 1 ? '' : 's'}`
+            : 'Content loaded';
+        if (statusText) statusText.textContent = Number.isInteger(chunkCount) ? `${chunkLabel} loaded` : chunkLabel;
+        if (contextText) contextText.textContent = chunkLabel;
     } else {
         contextStatus?.classList.remove('active');
         contextIndicator?.classList.remove('active');

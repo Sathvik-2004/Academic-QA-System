@@ -717,6 +717,7 @@ def upload_file():
                 'success': True,
                 'text': text,
                 'filename': 'Pasted Text',
+                'num_chunks': num_chunks,
                 'message': f'Successfully trained on pasted text ({num_chunks} knowledge chunks created)'
             })
         
@@ -753,6 +754,7 @@ def upload_file():
             'success': True,
             'text': text,
             'filename': original_filename,
+            'num_chunks': num_chunks,
             'message': f'Successfully trained on "{original_filename}" ({num_chunks} knowledge chunks created)'
         })
         
